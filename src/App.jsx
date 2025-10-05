@@ -96,9 +96,7 @@ const App = () => {
           <div className="nav-wrapper">
             <div className="logo">
               <i className="fas fa-code"></i>
-              <span>
-                تكنو<span>سول</span>
-              </span>
+              <span>تكنو</span>
             </div>
 
             <nav className={`nav ${isMenuOpen ? "nav-open" : ""}`}>
