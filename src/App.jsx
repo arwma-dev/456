@@ -1,73 +1,117 @@
 import React, { useState, useEffect } from "react";
+import "./App.css";
 
-const App = () => {
+const ModernWebsite = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [testimonials] = useState([
-    {
-      id: 1,
-      name: "أحمد محمد",
-      position: "مدير تسويق",
-      content: "خدمات ممتازة وسريعة، أنصح بالتعامل معهم",
-      avatar: "👨‍💼",
-    },
-    {
-      id: 2,
-      name: "فاطمة عبدالله",
-      position: "صاحبة مشروع",
-      content: "ساعدوني في تطوير متجري الإلكتروني بشكل رائع",
-      avatar: "👩‍💼",
-    },
-    {
-      id: 3,
-      name: "خالد السعدي",
-      position: "مدير تقنية",
-      content: "فريق محترف ومبدع في مجال التصميم والتطوير",
-      avatar: "👨‍🔧",
-    },
-  ]);
+  const [isScrolled, setIsScrolled] = useState(false);
 
+  // بيانات الموقع
   const [services] = useState([
     {
       id: 1,
       icon: "💻",
       title: "تطوير الويب",
-      description: "نطور مواقع ويب متكاملة بتقنيات حديثة",
+      description: "نطور مواقع ويب متكاملة بتقنيات حديثة وسريعة الاستجابة",
+      features: ["React", "Node.js", "MongoDB"],
     },
     {
       id: 2,
       icon: "📱",
       title: "تطبيقات الجوال",
-      description: "تصميم وتطوير تطبيقات الهواتف الذكية",
+      description: "تصميم وتطوير تطبيقات الهواتف الذكية لأنظمة iOS و Android",
+      features: ["React Native", "Flutter", "Firebase"],
     },
     {
       id: 3,
       icon: "🎨",
       title: "تصميم UI/UX",
       description: "تصميم واجهات مستخدم جذابة وسهلة الاستخدام",
+      features: ["Figma", "Adobe XD", "Prototyping"],
     },
     {
       id: 4,
       icon: "🛒",
       title: "متاجر إلكترونية",
-      description: "بناء متاجر إلكترونية متكاملة",
+      description: "بناء متاجر إلكترونية متكاملة مع أنظمة الدفع",
+      features: ["Shopify", "WooCommerce", "Payment Gateways"],
     },
   ]);
 
+  const [projects] = useState([
+    {
+      id: 1,
+      title: "منصة تعليمية",
+      category: "ويب",
+      image: "🎓",
+      description: "منصة تعليمية متكاملة مع نظام إدارة المحتوى",
+    },
+    {
+      id: 2,
+      title: "تطبيق توصيل",
+      category: "جوال",
+      image: "🚚",
+      description: "تطبيق توصيل طعام مع نظام متابعة في الوقت الفعلي",
+    },
+    {
+      id: 3,
+      title: "موقع شركة",
+      category: "ويب",
+      image: "🏢",
+      description: "موقع شركة احترافي مع نظام إدارة المحتوى",
+    },
+    {
+      id: 4,
+      title: "متجر إلكتروني",
+      category: "ويب",
+      image: "🛍️",
+      description: "متجر إلكتروني متكامل مع نظام الدفع",
+    },
+  ]);
+
+  const [testimonials] = useState([
+    {
+      id: 1,
+      name: "أحمد محمد",
+      position: "مدير تسويق",
+      content: "خدمات ممتازة وسريعة، فريق محترف أنصح بالتعامل معهم",
+      rating: 5,
+      avatar: "👨‍💼",
+    },
+    {
+      id: 2,
+      name: "فاطمة عبدالله",
+      position: "صاحبة مشروع",
+      content: "ساعدوني في تطوير متجري الإلكتروني بشكل رائع ومحترف",
+      rating: 5,
+      avatar: "👩‍💼",
+    },
+    {
+      id: 3,
+      name: "خالد السعدي",
+      position: "مدير تقنية",
+      content: "فريق مبدع ومحترف في مجال التصميم والتطوير",
+      rating: 4,
+      avatar: "👨‍🔧",
+    },
+  ]);
+
+  // تتبع التمرير
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["home", "about", "services", "portfolio", "contact"];
-      const scrollY = window.scrollY + 100;
+      const scrollY = window.scrollY;
+      setIsScrolled(scrollY > 100);
 
+      // تتبع الأقسام النشطة
+      const sections = ["home", "about", "services", "projects", "contact"];
       for (const section of sections) {
         const element = document.getElementById(section);
-        if (
-          element &&
-          scrollY >= element.offsetTop &&
-          scrollY < element.offsetTop + element.offsetHeight
-        ) {
-          setActiveSection(section);
-          break;
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= 100 && rect.bottom >= 100) {
+            setActiveSection(section);
+            break;
+          }
         }
       }
     };
@@ -76,6 +120,7 @@ const App = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // التنقل السلس
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -88,249 +133,314 @@ const App = () => {
     }
   };
 
+  // إرسال النموذج
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert("شكراً لتواصلك معنا! سنرد عليك قريباً.");
+    e.target.reset();
+  };
+
   return (
-    <div className="App">
-      {/* Header */}
-      <header className="header">
+    <div className="modern-website">
+      {/* الهيدر */}
+      <header className={`header ${isScrolled ? "scrolled" : ""}`}>
         <div className="container">
           <div className="nav-wrapper">
             <div className="logo">
-              <i className="fas fa-code"></i>
-              <span>تكنو</span>
+              <i className="fas fa-rocket"></i>
+              <span>
+                تكنو<span>سول</span>
+              </span>
             </div>
 
             <nav className={`nav ${isMenuOpen ? "nav-open" : ""}`}>
               <ul>
-                <li>
-                  <a
-                    className={activeSection === "home" ? "active" : ""}
-                    onClick={() => scrollToSection("home")}
-                  >
-                    الرئيسية
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className={activeSection === "about" ? "active" : ""}
-                    onClick={() => scrollToSection("about")}
-                  >
-                    من نحن
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className={activeSection === "services" ? "active" : ""}
-                    onClick={() => scrollToSection("services")}
-                  >
-                    خدماتنا
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className={activeSection === "portfolio" ? "active" : ""}
-                    onClick={() => scrollToSection("portfolio")}
-                  >
-                    أعمالنا
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className={activeSection === "contact" ? "active" : ""}
-                    onClick={() => scrollToSection("contact")}
-                  >
-                    اتصل بنا
-                  </a>
-                </li>
+                {["home", "about", "services", "projects", "contact"].map(
+                  (section) => (
+                    <li key={section}>
+                      <a
+                        className={activeSection === section ? "active" : ""}
+                        onClick={() => scrollToSection(section)}
+                      >
+                        {section === "home" && "الرئيسية"}
+                        {section === "about" && "من نحن"}
+                        {section === "services" && "خدماتنا"}
+                        {section === "projects" && "أعمالنا"}
+                        {section === "contact" && "اتصل بنا"}
+                      </a>
+                    </li>
+                  )
+                )}
               </ul>
             </nav>
 
-            <button className="cta-button">ابدأ مشروعك</button>
+            <div className="header-actions">
+              <button
+                className="cta-button"
+                onClick={() => scrollToSection("contact")}
+              >
+                ابدأ مشروعك
+              </button>
 
-            <button
-              className="menu-toggle"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
+              <button
+                className="menu-toggle"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                <span></span>
+                <span></span>
+                <span></span>
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* القسم الرئيسي */}
       <section id="home" className="hero">
         <div className="container">
           <div className="hero-content">
-            <h1>
-              نحو عالم رقمي <span>متميز</span>
-            </h1>
-            <p>
-              نحن نقدم حلولاً تقنية متكاملة تساعدك على النمو والتميز في عالم
-              الأعمال الرقمية
-            </p>
-            <div className="hero-buttons">
-              <button className="btn-primary">ابدأ الآن</button>
-              <button className="btn-secondary">اعرف المزيد</button>
-            </div>
-            <div className="hero-stats">
-              <div className="stat">
-                <h3>+500</h3>
-                <p>مشروع مكتمل</p>
+            <div className="hero-text">
+              <h1>
+                <span className="gradient-text">نحو عالم رقمي</span>
+                <br />
+                <span>متميز وإبداعي</span>
+              </h1>
+              <p>
+                نقدم حلولاً تقنية متكاملة تساعدك على النمو والتميز في عالم
+                الأعمال الرقمية. نحن شركة رائدة في مجال التطوير والتصميم الرقمي.
+              </p>
+              <div className="hero-buttons">
+                <button
+                  className="btn-primary"
+                  onClick={() => scrollToSection("projects")}
+                >
+                  شاهد أعمالنا
+                </button>
+                <button
+                  className="btn-secondary"
+                  onClick={() => scrollToSection("about")}
+                >
+                  اعرف المزيد
+                </button>
               </div>
-              <div className="stat">
-                <h3>+150</h3>
-                <p>عميل سعيد</p>
+
+              <div className="hero-stats">
+                <div className="stat">
+                  <h3>+500</h3>
+                  <p>مشروع مكتمل</p>
+                </div>
+                <div className="stat">
+                  <h3>+150</h3>
+                  <p>عميل سعيد</p>
+                </div>
+                <div className="stat">
+                  <h3>+5</h3>
+                  <p>سنوات خبرة</p>
+                </div>
               </div>
-              <div className="stat">
-                <h3>+5</h3>
-                <p>سنوات خبرة</p>
+            </div>
+
+            <div className="hero-visual">
+              <div className="floating-elements">
+                <div className="floating-card card-1">
+                  <i className="fas fa-mobile-alt"></i>
+                  <span>تطبيقات الجوال</span>
+                </div>
+                <div className="floating-card card-2">
+                  <i className="fas fa-laptop-code"></i>
+                  <span>تطوير الويب</span>
+                </div>
+                <div className="floating-card card-3">
+                  <i className="fas fa-shopping-cart"></i>
+                  <span>متاجر إلكترونية</span>
+                </div>
+                <div className="main-visual">
+                  <div className="visual-content">
+                    <i className="fas fa-rocket"></i>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="hero-image">
-            <div className="floating-card card-1">
-              <i className="fas fa-mobile-alt"></i>
-              <span>تطبيقات الجوال</span>
-            </div>
-            <div className="floating-card card-2">
-              <i className="fas fa-laptop-code"></i>
-              <span>تطوير الويب</span>
-            </div>
-            <div className="floating-card card-3">
-              <i className="fas fa-shopping-cart"></i>
-              <span>متاجر إلكترونية</span>
             </div>
           </div>
         </div>
+
+        <div className="hero-background">
+          <div className="bg-shape shape-1"></div>
+          <div className="bg-shape shape-2"></div>
+          <div className="bg-shape shape-3"></div>
+        </div>
       </section>
 
-      {/* About Section */}
+      {/* قسم من نحن */}
       <section id="about" className="about">
         <div className="container">
           <div className="section-header">
             <h2>من نحن</h2>
             <p>شركة رائدة في مجال الحلول التقنية والرقمية</p>
           </div>
+
           <div className="about-content">
             <div className="about-text">
               <h3>نحن فريق من المبدعين والمطورين المحترفين</h3>
               <p>
                 نعمل معاً لتقديم أفضل الحلول التقنية التي تلبي احتياجات عملائنا
-                وتساعدهم على تحقيق أهدافهم في العالم الرقمي.
+                وتساعدهم على تحقيق أهدافهم في العالم الرقمي. نحن نؤمن بأن
+                التكنولوجيا يجب أن تكون أداة لتسهيل الحياة ودفع عجلة التطور.
               </p>
 
-              <div className="features">
+              <div className="features-grid">
                 <div className="feature">
-                  <i className="fas fa-rocket"></i>
-                  <div>
+                  <div className="feature-icon">
+                    <i className="fas fa-rocket"></i>
+                  </div>
+                  <div className="feature-content">
                     <h4>تسليم سريع</h4>
                     <p>نضمن تسليم المشاريع في الوقت المتفق عليه</p>
                   </div>
                 </div>
+
                 <div className="feature">
-                  <i className="fas fa-medal"></i>
-                  <div>
+                  <div className="feature-icon">
+                    <i className="fas fa-medal"></i>
+                  </div>
+                  <div className="feature-content">
                     <h4>جودة عالية</h4>
                     <p>نقدم أعلى معايير الجودة في جميع مشاريعنا</p>
                   </div>
                 </div>
+
                 <div className="feature">
-                  <i className="fas fa-headset"></i>
-                  <div>
+                  <div className="feature-icon">
+                    <i className="fas fa-headset"></i>
+                  </div>
+                  <div className="feature-content">
                     <h4>دعم فني</h4>
                     <p>دعم فني متواصل بعد انتهاء المشروع</p>
+                  </div>
+                </div>
+
+                <div className="feature">
+                  <div className="feature-icon">
+                    <i className="fas fa-lightbulb"></i>
+                  </div>
+                  <div className="feature-content">
+                    <h4>حلول مبدعة</h4>
+                    <p>نقدم حلولاً مبتكرة تلبي احتياجاتك</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="about-image">
-              <div className="image-placeholder">
-                <i className="fas fa-users"></i>
+            <div className="about-visual">
+              <div className="visual-container">
+                <div className="team-visual">
+                  <div className="team-member member-1">
+                    <i className="fas fa-user"></i>
+                  </div>
+                  <div className="team-member member-2">
+                    <i className="fas fa-user"></i>
+                  </div>
+                  <div className="team-member member-3">
+                    <i className="fas fa-user"></i>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* قسم الخدمات */}
       <section id="services" className="services">
         <div className="container">
           <div className="section-header">
             <h2>خدماتنا</h2>
             <p>نقدم مجموعة متكاملة من الخدمات التقنية</p>
           </div>
+
           <div className="services-grid">
             {services.map((service) => (
               <div key={service.id} className="service-card">
                 <div className="service-icon">{service.icon}</div>
                 <h3>{service.title}</h3>
                 <p>{service.description}</p>
-                <a href="#" className="service-link">
+
+                <div className="service-features">
+                  {service.features.map((feature, index) => (
+                    <span key={index} className="feature-tag">
+                      {feature}
+                    </span>
+                  ))}
+                </div>
+
+                <button className="service-link">
                   اعرف المزيد <i className="fas fa-arrow-left"></i>
-                </a>
+                </button>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Portfolio Section */}
-      <section id="portfolio" className="portfolio">
+      {/* قسم الأعمال */}
+      <section id="projects" className="projects">
         <div className="container">
           <div className="section-header">
             <h2>أعمالنا</h2>
             <p>إطلالة على بعض مشاريعنا الناجحة</p>
           </div>
-          <div className="portfolio-grid">
-            <div className="portfolio-item">
-              <div className="portfolio-image">
-                <div className="image-placeholder">مشروع متجر إلكتروني</div>
+
+          <div className="projects-grid">
+            {projects.map((project) => (
+              <div key={project.id} className="project-card">
+                <div className="project-image">
+                  <div className="image-placeholder">{project.image}</div>
+                  <div className="project-overlay">
+                    <button className="view-project">
+                      <i className="fas fa-external-link-alt"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="project-content">
+                  <div className="project-category">{project.category}</div>
+                  <h3>{project.title}</h3>
+                  <p>{project.description}</p>
+                </div>
               </div>
-              <div className="portfolio-content">
-                <h3>متجر إلكتروني متكامل</h3>
-                <p>تصميم وتطوير متجر إلكتروني مع نظام دفع إلكتروني</p>
-                <span className="portfolio-category">تطوير ويب</span>
-              </div>
-            </div>
-            <div className="portfolio-item">
-              <div className="portfolio-image">
-                <div className="image-placeholder">تطبيق جوال</div>
-              </div>
-              <div className="portfolio-content">
-                <h3>تطبيق توصيل طعام</h3>
-                <p>تطبيق جوال لنظام توصيل الطعام مع إدارة المتاجر</p>
-                <span className="portfolio-category">تطبيقات جوال</span>
-              </div>
-            </div>
-            <div className="portfolio-item">
-              <div className="portfolio-image">
-                <div className="image-placeholder">منصة تعليمية</div>
-              </div>
-              <div className="portfolio-content">
-                <h3>منصة تعليم إلكتروني</h3>
-                <p>منصة متكاملة للتعليم عن بعد مع نظام إدارة المحتوى</p>
-                <span className="portfolio-category">تطوير ويب</span>
-              </div>
-            </div>
+            ))}
+          </div>
+
+          <div className="projects-cta">
+            <button
+              className="btn-primary"
+              onClick={() => scrollToSection("contact")}
+            >
+              اطلب مشروعك الآن
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
+      {/* قسم آراء العملاء */}
       <section className="testimonials">
         <div className="container">
           <div className="section-header">
             <h2>آراء عملائنا</h2>
             <p>ماذا يقول عملاؤنا عن خدماتنا</p>
           </div>
+
           <div className="testimonials-grid">
             {testimonials.map((testimonial) => (
               <div key={testimonial.id} className="testimonial-card">
                 <div className="testimonial-content">
+                  <div className="rating">
+                    {"★".repeat(testimonial.rating)}
+                    {"☆".repeat(5 - testimonial.rating)}
+                  </div>
                   <p>"{testimonial.content}"</p>
                 </div>
+
                 <div className="testimonial-author">
                   <div className="author-avatar">{testimonial.avatar}</div>
                   <div className="author-info">
@@ -344,51 +454,87 @@ const App = () => {
         </div>
       </section>
 
-      {/* Contact Section */}
+      {/* قسم الاتصال */}
       <section id="contact" className="contact">
         <div className="container">
           <div className="section-header">
             <h2>اتصل بنا</h2>
             <p>نحن هنا لمساعدتك في مشروعك القادم</p>
           </div>
+
           <div className="contact-content">
             <div className="contact-info">
               <div className="contact-item">
-                <i className="fas fa-phone"></i>
-                <div>
+                <div className="contact-icon">
+                  <i className="fas fa-phone"></i>
+                </div>
+                <div className="contact-details">
                   <h4>الهاتف</h4>
                   <p>+966 50 123 4567</p>
                 </div>
               </div>
+
               <div className="contact-item">
-                <i className="fas fa-envelope"></i>
-                <div>
+                <div className="contact-icon">
+                  <i className="fas fa-envelope"></i>
+                </div>
+                <div className="contact-details">
                   <h4>البريد الإلكتروني</h4>
                   <p>info@technosol.com</p>
                 </div>
               </div>
+
               <div className="contact-item">
-                <i className="fas fa-map-marker-alt"></i>
-                <div>
+                <div className="contact-icon">
+                  <i className="fas fa-map-marker-alt"></i>
+                </div>
+                <div className="contact-details">
                   <h4>العنوان</h4>
                   <p>الرياض، المملكة العربية السعودية</p>
                 </div>
               </div>
+
+              <div className="social-links">
+                <h4>تابعنا على</h4>
+                <div className="social-icons">
+                  <a href="#" className="social-link">
+                    <i className="fab fa-twitter"></i>
+                  </a>
+                  <a href="#" className="social-link">
+                    <i className="fab fa-facebook"></i>
+                  </a>
+                  <a href="#" className="social-link">
+                    <i className="fab fa-instagram"></i>
+                  </a>
+                  <a href="#" className="social-link">
+                    <i className="fab fa-linkedin"></i>
+                  </a>
+                </div>
+              </div>
             </div>
 
-            <form className="contact-form">
-              <div className="form-group">
-                <input type="text" placeholder="الاسم الكامل" required />
+            <form className="contact-form" onSubmit={handleSubmit}>
+              <div className="form-row">
+                <div className="form-group">
+                  <input type="text" placeholder="الاسم الكامل" required />
+                </div>
+                <div className="form-group">
+                  <input
+                    type="email"
+                    placeholder="البريد الإلكتروني"
+                    required
+                  />
+                </div>
               </div>
-              <div className="form-group">
-                <input type="email" placeholder="البريد الإلكتروني" required />
-              </div>
+
               <div className="form-group">
                 <input type="text" placeholder="الموضوع" required />
               </div>
+
               <div className="form-group">
                 <textarea placeholder="الرسالة" rows="5" required></textarea>
               </div>
+
               <button type="submit" className="btn-primary">
                 إرسال الرسالة
               </button>
@@ -397,32 +543,21 @@ const App = () => {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* الفوتر */}
       <footer className="footer">
         <div className="container">
           <div className="footer-content">
             <div className="footer-section">
               <div className="logo">
-                <i className="fas fa-code"></i>
+                <i className="fas fa-rocket"></i>
                 <span>
                   تكنو<span>سول</span>
                 </span>
               </div>
-              <p>شركة رائدة في تقديم الحلول التقنية والرقمية المتكاملة</p>
-              <div className="social-links">
-                <a href="#">
-                  <i className="fab fa-twitter"></i>
-                </a>
-                <a href="#">
-                  <i className="fab fa-facebook"></i>
-                </a>
-                <a href="#">
-                  <i className="fab fa-instagram"></i>
-                </a>
-                <a href="#">
-                  <i className="fab fa-linkedin"></i>
-                </a>
-              </div>
+              <p>
+                شركة رائدة في تقديم الحلول التقنية والرقمية المتكاملة لمساعدة
+                الشركات على النمو والنجاح في العالم الرقمي.
+              </p>
             </div>
 
             <div className="footer-section">
@@ -438,7 +573,7 @@ const App = () => {
                   <a onClick={() => scrollToSection("services")}>خدماتنا</a>
                 </li>
                 <li>
-                  <a onClick={() => scrollToSection("portfolio")}>أعمالنا</a>
+                  <a onClick={() => scrollToSection("projects")}>أعمالنا</a>
                 </li>
               </ul>
             </div>
@@ -447,16 +582,16 @@ const App = () => {
               <h4>خدماتنا</h4>
               <ul>
                 <li>
-                  <a href="#">تطوير الويب</a>
+                  <a>تطوير الويب</a>
                 </li>
                 <li>
-                  <a href="#">تطبيقات الجوال</a>
+                  <a>تطبيقات الجوال</a>
                 </li>
                 <li>
-                  <a href="#">تصميم UI/UX</a>
+                  <a>تصميم UI/UX</a>
                 </li>
                 <li>
-                  <a href="#">متاجر إلكترونية</a>
+                  <a>متاجر إلكترونية</a>
                 </li>
               </ul>
             </div>
@@ -464,7 +599,7 @@ const App = () => {
             <div className="footer-section">
               <h4>النشرة البريدية</h4>
               <p>اشترك في نشرتنا البريدية لتصلك آخر العروض والأخبار</p>
-              <div className="newsletter">
+              <div className="newsletter-form">
                 <input type="email" placeholder="بريدك الإلكتروني" />
                 <button type="submit">
                   <i className="fas fa-paper-plane"></i>
@@ -482,113 +617,135 @@ const App = () => {
   );
 };
 
-// ملف CSS منفصل (App.css)
+// إضافة الأنماط
 const AppCSS = `
 :root {
-  --primary: #2c3e50;
-  --secondary: #3498db;
-  --accent: #e74c3c;
-  --light: #ecf0f1;
-  --dark: #2c3e50;
-  --gray: #95a5a6;
-  --success: #2ecc71;
-  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --transition: all 0.3s ease;
+  --primary: #4361ee;
+  --primary-dark: #3a56d4;
+  --secondary: #7209b7;
+  --accent: #f72585;
+  --success: #4cc9f0;
+  --warning: #f8961e;
+  --error: #e63946;
+  --dark: #1d3557;
+  --light: #f8f9fa;
+  --gray: #6c757d;
+  --gray-light: #e9ecef;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.15);
+  --border-radius: 12px;
+  --border-radius-lg: 20px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --container-width: 1200px;
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-  background-color: #f9f9f9;
-  color: #333;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
+  color: var(--dark);
+  background-color: var(--light);
   direction: rtl;
+  overflow-x: hidden;
 }
 
 .container {
   width: 100%;
-  max-width: 1200px;
+  max-width: var(--container-width);
   margin: 0 auto;
   padding: 0 20px;
 }
 
-/* Header Styles */
+/* الهيدر */
 .header {
-  background-color: var(--primary);
-  color: white;
-  padding: 1rem 0;
   position: fixed;
-  width: 100%;
   top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   z-index: 1000;
+  transition: var(--transition);
+}
+
+.header.scrolled {
+  background: rgba(255, 255, 255, 0.98);
   box-shadow: var(--shadow);
 }
 
 .nav-wrapper {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
 }
 
 .logo {
-  font-size: 1.8rem;
-  font-weight: bold;
   display: flex;
   align-items: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--dark);
+  text-decoration: none;
 }
 
 .logo i {
-  margin-left: 10px;
-  color: var(--secondary);
+  margin-left: 0.5rem;
+  color: var(--primary);
 }
 
-.logo span {
-  color: var(--secondary);
+.logo span span {
+  color: var(--primary);
 }
 
 .nav ul {
   display: flex;
   list-style: none;
+  gap: 2rem;
 }
 
-.nav ul li {
-  margin: 0 15px;
-}
-
-.nav ul li a {
-  color: white;
+.nav a {
   text-decoration: none;
+  color: var(--dark);
   font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
   transition: var(--transition);
-  padding: 5px 10px;
-  border-radius: 4px;
   cursor: pointer;
 }
 
-.nav ul li a:hover,
-.nav ul li a.active {
-  background-color: rgba(255, 255, 255, 0.1);
+.nav a:hover,
+.nav a.active {
+  color: var(--primary);
+  background: rgba(67, 97, 238, 0.1);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .cta-button {
-  background-color: var(--secondary);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-weight: 600;
   cursor: pointer;
-  font-weight: bold;
   transition: var(--transition);
 }
 
 .cta-button:hover {
-  background-color: #2980b9;
   transform: translateY(-2px);
+  box-shadow: var(--shadow);
 }
 
 .menu-toggle {
@@ -597,125 +754,164 @@ body {
   background: none;
   border: none;
   cursor: pointer;
+  padding: 0.5rem;
 }
 
 .menu-toggle span {
   width: 25px;
   height: 3px;
-  background: white;
+  background: var(--dark);
   margin: 3px 0;
-  transition: 0.3s;
+  transition: var(--transition);
+  border-radius: 2px;
 }
 
-/* Hero Section */
+/* القسم الرئيسي */
 .hero {
-  background: linear-gradient(135deg, var(--primary) 0%, #34495e 100%);
-  color: white;
-  padding: 150px 0 100px;
+  position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  overflow: hidden;
 }
 
-.hero .container {
+.hero-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 50px;
+  gap: 4rem;
   align-items: center;
+  position: relative;
+  z-index: 2;
 }
 
-.hero h1 {
+.hero-text h1 {
   font-size: 3.5rem;
-  margin-bottom: 1rem;
+  font-weight: 700;
   line-height: 1.2;
+  margin-bottom: 1.5rem;
+  color: white;
 }
 
-.hero h1 span {
-  color: var(--secondary);
+.gradient-text {
+  background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.hero p {
+.hero-text p {
   font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.9);
   margin-bottom: 2rem;
-  opacity: 0.9;
+  line-height: 1.6;
 }
 
 .hero-buttons {
   display: flex;
-  gap: 15px;
+  gap: 1rem;
   margin-bottom: 3rem;
 }
 
 .btn-primary {
-  background-color: var(--secondary);
+  background: var(--accent);
   color: white;
   border: none;
-  padding: 12px 30px;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-weight: bold;
+  padding: 1rem 2rem;
+  border-radius: var(--border-radius);
+  font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
 }
 
 .btn-primary:hover {
-  background-color: #2980b9;
+  background: #e1156d;
   transform: translateY(-2px);
+  box-shadow: var(--shadow);
 }
 
 .btn-secondary {
-  background-color: transparent;
+  background: transparent;
   color: white;
-  border: 2px solid white;
-  padding: 12px 30px;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-weight: bold;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 1rem 2rem;
+  border-radius: var(--border-radius);
+  font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
 }
 
 .btn-secondary:hover {
-  background-color: white;
-  color: var(--primary);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .hero-stats {
   display: flex;
-  gap: 30px;
+  gap: 2rem;
+}
+
+.stat {
+  text-align: center;
 }
 
 .stat h3 {
   font-size: 2rem;
-  margin-bottom: 5px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.5rem;
 }
 
 .stat p {
-  font-size: 0.9rem;
-  opacity: 0.8;
+  color: rgba(255, 255, 255, 0.8);
   margin: 0;
+  font-size: 0.9rem;
 }
 
-.hero-image {
+.hero-visual {
   position: relative;
   height: 400px;
+}
+
+.floating-elements {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.main-visual {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.main-visual i {
+  font-size: 4rem;
+  color: white;
 }
 
 .floating-card {
   position: absolute;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
-  padding: 20px;
-  border-radius: 10px;
+  padding: 1rem;
+  border-radius: var(--border-radius);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.5rem;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   animation: float 3s ease-in-out infinite;
-}
-
-.floating-card i {
-  font-size: 1.5rem;
-  color: var(--secondary);
 }
 
 .card-1 {
@@ -742,20 +938,57 @@ body {
   50% { transform: translateY(-10px); }
 }
 
-/* Sections Common Styles */
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.shape-1 {
+  width: 300px;
+  height: 300px;
+  top: -150px;
+  right: -150px;
+}
+
+.shape-2 {
+  width: 200px;
+  height: 200px;
+  bottom: 100px;
+  left: -100px;
+}
+
+.shape-3 {
+  width: 150px;
+  height: 150px;
+  top: 50%;
+  left: 10%;
+}
+
+/* الأقسام العامة */
 section {
-  padding: 100px 0;
+  padding: 5rem 0;
 }
 
 .section-header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 4rem;
 }
 
 .section-header h2 {
   font-size: 2.5rem;
-  color: var(--primary);
-  margin-bottom: 15px;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 1rem;
 }
 
 .section-header p {
@@ -765,190 +998,299 @@ section {
   margin: 0 auto;
 }
 
-/* About Section */
+/* قسم من نحن */
 .about {
-  background-color: white;
+  background: white;
 }
 
 .about-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 50px;
+  gap: 4rem;
   align-items: center;
 }
 
 .about-text h3 {
   font-size: 2rem;
-  color: var(--primary);
-  margin-bottom: 20px;
+  color: var(--dark);
+  margin-bottom: 1.5rem;
 }
 
 .about-text p {
   font-size: 1.1rem;
-  margin-bottom: 30px;
-  color: #555;
+  color: var(--gray);
+  margin-bottom: 2rem;
+  line-height: 1.7;
 }
 
-.features {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
 }
 
 .feature {
   display: flex;
-  align-items: flex-start;
-  gap: 15px;
+  gap: 1rem;
 }
 
-.feature i {
-  background-color: var(--secondary);
+.feature-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: white;
-  width: 50px;
-  height: 50px;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.feature-content h4 {
+  font-size: 1.2rem;
+  color: var(--dark);
+  margin-bottom: 0.5rem;
+}
+
+.feature-content p {
+  color: var(--gray);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.about-visual {
+  display: flex;
+  justify-content: center;
+}
+
+.visual-container {
+  width: 300px;
+  height: 300px;
+  position: relative;
+}
+
+.team-visual {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.team-member {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
-  flex-shrink: 0;
-}
-
-.feature h4 {
-  font-size: 1.2rem;
-  margin-bottom: 5px;
-  color: var(--primary);
-}
-
-.feature p {
-  margin: 0;
-  color: #666;
-}
-
-.about-image {
-  display: flex;
-  justify-content: center;
-}
-
-.image-placeholder {
-  width: 300px;
-  height: 300px;
-  background: linear-gradient(135deg, var(--secondary), var(--primary));
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   color: white;
-  font-size: 4rem;
+  font-size: 1.5rem;
+  border: 4px solid white;
+  box-shadow: var(--shadow);
 }
 
-/* Services Section */
+.member-1 {
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.member-2 {
+  bottom: 20px;
+  left: 20px;
+}
+
+.member-3 {
+  bottom: 20px;
+  right: 20px;
+}
+
+/* قسم الخدمات */
 .services {
-  background-color: #f8f9fa;
+  background: var(--light);
 }
 
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
 }
 
 .service-card {
   background: white;
-  padding: 40px 30px;
-  border-radius: 10px;
+  padding: 2.5rem 2rem;
+  border-radius: var(--border-radius-lg);
   text-align: center;
   box-shadow: var(--shadow);
   transition: var(--transition);
+  border: 1px solid var(--gray-light);
 }
 
 .service-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
 }
 
 .service-icon {
   font-size: 3rem;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 }
 
 .service-card h3 {
   font-size: 1.5rem;
-  margin-bottom: 15px;
-  color: var(--primary);
+  color: var(--dark);
+  margin-bottom: 1rem;
 }
 
 .service-card p {
-  color: #666;
-  margin-bottom: 20px;
+  color: var(--gray);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.service-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.feature-tag {
+  background: var(--gray-light);
+  color: var(--dark);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
 }
 
 .service-link {
-  color: var(--secondary);
-  text-decoration: none;
-  font-weight: bold;
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 0.5rem;
+  transition: var(--transition);
 }
 
-/* Portfolio Section */
-.portfolio-grid {
+.service-link:hover {
+  color: var(--primary-dark);
+  gap: 1rem;
+}
+
+/* قسم الأعمال */
+.projects {
+  background: white;
+}
+
+.projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
+  gap: 2rem;
+  margin-bottom: 3rem;
 }
 
-.portfolio-item {
+.project-card {
   background: white;
-  border-radius: 10px;
+  border-radius: var(--border-radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow);
   transition: var(--transition);
 }
 
-.portfolio-item:hover {
+.project-card:hover {
   transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
 }
 
-.portfolio-image {
+.project-image {
+  position: relative;
   height: 200px;
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 1.2rem;
-  font-weight: bold;
+  font-size: 3rem;
 }
 
-.portfolio-content {
-  padding: 25px;
+.project-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: var(--transition);
 }
 
-.portfolio-content h3 {
-  font-size: 1.3rem;
-  margin-bottom: 10px;
-  color: var(--primary);
+.project-card:hover .project-overlay {
+  opacity: 1;
 }
 
-.portfolio-content p {
-  color: #666;
-  margin-bottom: 15px;
+.view-project {
+  background: var(--accent);
+  color: white;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
 }
 
-.portfolio-category {
-  background-color: var(--light);
-  color: var(--primary);
-  padding: 5px 15px;
+.view-project:hover {
+  background: #e1156d;
+  transform: scale(1.1);
+}
+
+.project-content {
+  padding: 1.5rem;
+}
+
+.project-category {
+  background: var(--gray-light);
+  color: var(--dark);
+  padding: 0.25rem 0.75rem;
   border-radius: 20px;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: inline-block;
+  margin-bottom: 1rem;
 }
 
-/* Testimonials Section */
+.project-content h3 {
+  font-size: 1.3rem;
+  color: var(--dark);
+  margin-bottom: 0.5rem;
+}
+
+.project-content p {
+  color: var(--gray);
+  line-height: 1.6;
+}
+
+.projects-cta {
+  text-align: center;
+}
+
+/* قسم آراء العملاء */
 .testimonials {
-  background: linear-gradient(135deg, var(--primary) 0%, #34495e 100%);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: white;
 }
 
@@ -960,35 +1302,41 @@ section {
 .testimonials-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
+  gap: 2rem;
 }
 
 .testimonial-card {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
-  padding: 30px;
-  border-radius: 10px;
+  padding: 2rem;
+  border-radius: var(--border-radius-lg);
   border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.rating {
+  color: #ffd700;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
 }
 
 .testimonial-content p {
   font-style: italic;
-  margin-bottom: 20px;
-  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
 }
 
 .testimonial-author {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 1rem;
 }
 
 .author-avatar {
-  font-size: 2rem;
+  font-size: 2.5rem;
 }
 
 .author-info h4 {
-  margin-bottom: 5px;
+  margin-bottom: 0.25rem;
 }
 
 .author-info span {
@@ -996,95 +1344,141 @@ section {
   font-size: 0.9rem;
 }
 
-/* Contact Section */
+/* قسم الاتصال */
+.contact {
+  background: white;
+}
+
 .contact-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 50px;
+  gap: 4rem;
 }
 
 .contact-info {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 2rem;
 }
 
 .contact-item {
   display: flex;
   align-items: flex-start;
-  gap: 15px;
+  gap: 1rem;
 }
 
-.contact-item i {
-  background-color: var(--secondary);
+.contact-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: white;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.contact-details h4 {
+  font-size: 1.2rem;
+  color: var(--dark);
+  margin-bottom: 0.5rem;
+}
+
+.contact-details p {
+  color: var(--gray);
+  margin: 0;
+}
+
+.social-links h4 {
+  font-size: 1.2rem;
+  color: var(--dark);
+  margin-bottom: 1rem;
+}
+
+.social-icons {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-link {
   width: 50px;
   height: 50px;
+  background: var(--gray-light);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
-  flex-shrink: 0;
+  color: var(--dark);
+  text-decoration: none;
+  transition: var(--transition);
 }
 
-.contact-item h4 {
-  font-size: 1.2rem;
-  margin-bottom: 5px;
-  color: var(--primary);
-}
-
-.contact-item p {
-  color: #666;
-  margin: 0;
+.social-link:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-3px);
 }
 
 .contact-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
 }
 
 .form-group input,
 .form-group textarea {
-  width: 100%;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  padding: 1rem;
+  border: 1px solid var(--gray-light);
+  border-radius: var(--border-radius);
   font-size: 1rem;
   transition: var(--transition);
+  font-family: inherit;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: var(--secondary);
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
 }
 
-/* Footer */
+/* الفوتر */
 .footer {
-  background-color: var(--primary);
+  background: var(--dark);
   color: white;
-  padding: 60px 0 20px;
+  padding: 4rem 0 2rem;
 }
 
 .footer-content {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1.5fr;
-  gap: 40px;
-  margin-bottom: 40px;
+  gap: 3rem;
+  margin-bottom: 3rem;
 }
 
 .footer-section h4 {
-  font-size: 1.3rem;
-  margin-bottom: 20px;
-  color: var(--secondary);
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: white;
 }
 
 .footer-section p {
   opacity: 0.8;
-  margin-bottom: 20px;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
 }
 
 .footer-section ul {
@@ -1092,90 +1486,85 @@ section {
 }
 
 .footer-section ul li {
-  margin-bottom: 10px;
+  margin-bottom: 0.75rem;
 }
 
 .footer-section ul li a {
-  color: white;
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
-  opacity: 0.8;
   transition: var(--transition);
   cursor: pointer;
 }
 
 .footer-section ul li a:hover {
-  opacity: 1;
-  color: var(--secondary);
-}
-
-.social-links {
-  display: flex;
-  gap: 15px;
-}
-
-.social-links a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
   color: white;
-  text-decoration: none;
-  transition: var(--transition);
 }
 
-.social-links a:hover {
-  background-color: var(--secondary);
-  transform: translateY(-3px);
-}
-
-.newsletter {
+.newsletter-form {
   display: flex;
-  margin-top: 15px;
+  margin-top: 1rem;
 }
 
-.newsletter input {
+.newsletter-form input {
   flex: 1;
-  padding: 12px;
+  padding: 0.75rem;
   border: none;
-  border-radius: 5px 0 0 5px;
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
   font-size: 1rem;
 }
 
-.newsletter button {
-  background-color: var(--secondary);
+.newsletter-form button {
+  background: var(--primary);
   color: white;
   border: none;
-  padding: 0 20px;
-  border-radius: 0 5px 5px 0;
+  padding: 0 1.5rem;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
   cursor: pointer;
   transition: var(--transition);
 }
 
-.newsletter button:hover {
-  background-color: #2980b9;
+.newsletter-form button:hover {
+  background: var(--primary-dark);
 }
 
 .footer-bottom {
   text-align: center;
-  padding-top: 20px;
+  padding-top: 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   opacity: 0.7;
 }
 
-/* Responsive Design */
+/* التصميم المتجاوب */
+@media (max-width: 1024px) {
+  .hero-content {
+    gap: 2rem;
+  }
+  
+  .hero-text h1 {
+    font-size: 3rem;
+  }
+  
+  .footer-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+}
+
 @media (max-width: 768px) {
+  .container {
+    padding: 0 15px;
+  }
+  
   .nav {
     position: fixed;
-    top: 70px;
+    top: 80px;
     right: -100%;
-    background: var(--primary);
+    background: white;
     width: 80%;
-    height: calc(100vh - 70px);
-    transition: 0.3s;
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    height: calc(100vh - 80px);
+    transition: var(--transition);
+    box-shadow: var(--shadow-lg);
+    padding: 2rem;
   }
   
   .nav-open {
@@ -1184,24 +1573,20 @@ section {
   
   .nav ul {
     flex-direction: column;
-    padding: 20px;
-  }
-  
-  .nav ul li {
-    margin: 15px 0;
+    gap: 1rem;
   }
   
   .menu-toggle {
     display: flex;
   }
   
-  .hero .container,
+  .hero-content,
   .about-content,
   .contact-content {
     grid-template-columns: 1fr;
   }
   
-  .hero h1 {
+  .hero-text h1 {
     font-size: 2.5rem;
   }
   
@@ -1213,14 +1598,23 @@ section {
     justify-content: space-between;
   }
   
-  .footer-content {
+  .features-grid {
     grid-template-columns: 1fr;
-    gap: 30px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .services-grid,
+  .projects-grid,
+  .testimonials-grid {
+    grid-template-columns: 1fr;
   }
   
   .floating-card {
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
   }
   
   .card-1, .card-2, .card-3 {
@@ -1230,15 +1624,16 @@ section {
     right: auto;
     bottom: auto;
     transform: none;
+    margin: 1rem 0;
+  }
+  
+  .hero-visual {
+    height: 300px;
   }
 }
 
 @media (max-width: 480px) {
-  .container {
-    padding: 0 15px;
-  }
-  
-  .hero h1 {
+  .hero-text h1 {
     font-size: 2rem;
   }
   
@@ -1246,17 +1641,24 @@ section {
     font-size: 2rem;
   }
   
-  .services-grid,
-  .portfolio-grid,
-  .testimonials-grid {
+  .footer-content {
     grid-template-columns: 1fr;
+  }
+  
+  .header-actions {
+    gap: 0.5rem;
+  }
+  
+  .cta-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
   }
 }
 `;
 
-// إنشاء ملف CSS
+// إضافة الأنماط إلى المستند
 const styleSheet = document.createElement("style");
 styleSheet.textContent = AppCSS;
 document.head.appendChild(styleSheet);
 
-export default App;
+export default ModernWebsite;
